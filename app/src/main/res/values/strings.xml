@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">NaniIro</string>
     <string name="mRetakeButtonText">Retake</string>
+    <string name="mReviewButtonText">View Photo</string>
     <string name="mRGBColorDefault">RGB</string>
     <string name="mImageView_desc">color</string>
 </resources>

@@ -22,6 +22,7 @@ import java.text.*;
 import java.util.*;
 
 import static android.graphics.Color.colorToHSV;
+import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -36,16 +37,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         final Button mRetakeButton = findViewById(R.id.mRetakeButton);
+        final Button mReviewButton = findViewById(R.id.mReviewButton);
+
         mRetakeButton.setOnClickListener(new View.OnClickListener() {
            public void onClick(View v) {
                dispatchTakePictureIntent();
            }
         });
+        mReviewButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                reviewImage();
+            }
+        });
 
         dispatchTakePictureIntent();
     }
 
-    private void dispatchTakePictureIntent() {
+    public void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -110,5 +118,11 @@ public class MainActivity extends AppCompatActivity {
         // Save a file: pathfor use with ACTION_VIEW intents
         mCurrentPhotoPath = image.getAbsolutePath();
         return image;
+    }
+
+    public void reviewImage() {
+        Intent intent = new Intent(this, ImageViewActivity.class);
+        intent.putExtra(EXTRA_MESSAGE, mCurrentPhotoPath);
+        startActivity(intent);
     }
 }
