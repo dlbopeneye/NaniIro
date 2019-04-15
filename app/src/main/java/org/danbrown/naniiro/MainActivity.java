@@ -9,6 +9,7 @@ import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.View;
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         final Button mRetakeButton = findViewById(R.id.mRetakeButton);
         // final Button mReviewButton = findViewById(R.id.mReviewButton);
-        mRGBText = (TextView) findViewById(R.id.mRGBText);
+        mRGBText = findViewById(R.id.mRGBText);
         mRGBText.setVisibility(View.GONE);
         mRetakeButton.setOnClickListener(new View.OnClickListener() {
            public void onClick(View v) {
@@ -106,6 +107,8 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             TextView mRGBColor = findViewById(R.id.mRGBText);
             ImageView mImageView = findViewById(R.id.mImageView);
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
             Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
             int midW = bitmap.getWidth() / 2;
@@ -118,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
             int g = (mRGB >> 8) & 0xff;
             int b = mRGB & 0xff;
 
-            Bitmap mBlock = Bitmap.createBitmap(250, 250, Bitmap.Config.ARGB_8888);
+            Bitmap mBlock = Bitmap.createBitmap(displayMetrics.widthPixels, 250, Bitmap.Config.ARGB_8888);
             mBlock.eraseColor(mRGB);
 
             // colorToHSV(mRGB, mHSV);
@@ -132,7 +135,8 @@ public class MainActivity extends AppCompatActivity {
 
     private File createImageFile() throws IOException {
         // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        // String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String timeStamp = DateFormat.getDateTimeInstance().format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_" ;
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
