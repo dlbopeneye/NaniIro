@@ -1,5 +1,7 @@
 package org.danbrown.naniiro;
 
+import org.danbrown.naniiro.ColorSets;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -27,13 +29,10 @@ import java.util.*;
 import static android.graphics.Color.colorToHSV;
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
-
 public class MainActivity extends AppCompatActivity {
     
     static final int REQUEST_TAKE_PHOTO = 1;
     String mCurrentPhotoPath;
-
-    TextView mRGBText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,43 +40,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         final Button mRetakeButton = findViewById(R.id.mRetakeButton);
-        // final Button mReviewButton = findViewById(R.id.mReviewButton);
-        mRGBText = findViewById(R.id.mRGBText);
-        mRGBText.setVisibility(View.GONE);
+        findViewById(R.id.mRGBText).setVisibility(View.GONE);
+        findViewById(R.id.mHSVText).setVisibility(View.GONE);
+        findViewById(R.id.mClosestColorText).setVisibility(View.GONE);
         mRetakeButton.setOnClickListener(new View.OnClickListener() {
            public void onClick(View v) {
                dispatchTakePictureIntent();
            }
         });
-        /* mReviewButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                reviewImage();
-            }
-        }); */
 
         dispatchTakePictureIntent();
-    }
-
-    public static void slideUp(Context ctx, View v) {
-        Animation a = AnimationUtils.loadAnimation(ctx, R.anim.slide_up);
-        if (a != null) {
-            a.reset();
-            if (v != null) {
-                v.clearAnimation();
-                v.startAnimation(a);
-            }
-        }
-    }
-
-    public static void slideDown(Context ctx, View v) {
-        Animation a = AnimationUtils.loadAnimation(ctx, R.anim.slide_down);
-        if (a != null) {
-            a.reset();
-            if (v != null) {
-                v.clearAnimation();
-                v.startAnimation(a);
-            }
-        }
     }
 
     public void dispatchTakePictureIntent() {
@@ -105,31 +77,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-            TextView mRGBColor = findViewById(R.id.mRGBText);
-            ImageView mImageView = findViewById(R.id.mImageView);
-            DisplayMetrics displayMetrics = new DisplayMetrics();
-            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-
             Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
-            int midW = bitmap.getWidth() / 2;
-            int midH = bitmap.getHeight() / 2;
+            int mRGB = bitmap.getPixel((bitmap.getWidth() / 2), (bitmap.getHeight() / 2));
 
-            // float[] mHSV = new float[3];
+            float[] mHSV = new float[3];
+            colorToHSV(mRGB, mHSV);
 
-            int mRGB = bitmap.getPixel(midW, midH);
-            int r = (mRGB >> 16) & 0xff;
-            int g = (mRGB >> 8) & 0xff;
-            int b = mRGB & 0xff;
+            setColorDisplay(mRGB);
+            setRGBText(mRGB);
+            setHSVText(mHSV);
+            findClosestColor(mHSV);
 
-            Bitmap mBlock = Bitmap.createBitmap(displayMetrics.widthPixels, 250, Bitmap.Config.ARGB_8888);
-            mBlock.eraseColor(mRGB);
-
-            // colorToHSV(mRGB, mHSV);
-
-            String mRGBString = "[" + r + ", " + g + ", " + b + "]";
-
-            mRGBColor.setText(mRGBString);
-            mImageView.setImageBitmap(mBlock);
+            // TextView mClosestColorText = findViewById(R.id.mClosestColorText);
+            // mClosestColorText.setText(ColorSets.X11Colors[0].ColorName);
         }
     }
 
@@ -150,19 +110,96 @@ public class MainActivity extends AppCompatActivity {
         return image;
     }
 
+    private void setColorDisplay(int mRGB) {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        Bitmap mBlock = Bitmap.createBitmap(displayMetrics.widthPixels, 250, Bitmap.Config.ARGB_8888);
+        mBlock.eraseColor(mRGB);
+
+        ImageView mImageView = findViewById(R.id.mColorDisplay);
+        mImageView.setImageBitmap(mBlock);
+    }
+
+    private void setRGBText(int mRGB) {
+        int r = (mRGB >> 16) & 0xff;
+        int g = (mRGB >> 8) & 0xff;
+        int b = mRGB & 0xff;
+        String mRGBString = "R " + r + "\nG " + g + "\nB " + b;
+
+        TextView mRGBText = findViewById(R.id.mRGBText);
+        mRGBText.setText(mRGBString);
+    }
+
+    private void setHSVText(float[] mHSV) {
+        String mHSVString = "H " + mHSV[0] + "\nS " + mHSV[1] + "\nV " + mHSV[2];
+
+        TextView mHSVText = findViewById(R.id.mHSVText);
+        mHSVText.setText(mHSVString);
+    }
+
+    private void findClosestColor(float[] mHSV) {
+        float distance = Float.MAX_VALUE;
+        int closestIndex = 0;
+        for (int i = 0; i < ColorSets.X11Colors.length; i++) {
+            float[] X11HSV = new float[3];
+            colorToHSV(ColorSets.X11Colors[i].ColorRGB, X11HSV);
+            float tryDistance = findHSVDist(mHSV, X11HSV);
+            if (tryDistance < distance) {
+                distance = tryDistance;
+                closestIndex = i;
+            }
+        }
+
+        TextView mClosestColorText = findViewById(R.id.mClosestColorText);
+        mClosestColorText.setText(ColorSets.X11Colors[closestIndex].ColorName);
+    }
+
+    private float findHSVDist(float[] mHSVOne, float[] mHSVTwo) {
+        return (mHSVOne[0] - mHSVTwo[0])*(mHSVOne[0] - mHSVTwo[0]) +
+                (mHSVOne[1] - mHSVTwo[1])*(mHSVOne[1] - mHSVTwo[1]) +
+                (mHSVOne[2] - mHSVTwo[2])*(mHSVOne[2] - mHSVTwo[2]);
+    }
+
     public void reviewImage(View v) {
         Intent intent = new Intent(this, ImageViewActivity.class);
         intent.putExtra(EXTRA_MESSAGE, mCurrentPhotoPath);
         startActivity(intent);
     }
 
+    /* Content Toggle Controls */
+
+    public static void slideUp(Context ctx, View v) {
+        Animation a = AnimationUtils.loadAnimation(ctx, R.anim.slide_up);
+        if (a != null) {
+            a.reset();
+            if (v != null) {
+                v.clearAnimation();
+                v.startAnimation(a);
+            }
+        }
+    }
+
+    public static void slideDown(Context ctx, View v) {
+        Animation a = AnimationUtils.loadAnimation(ctx, R.anim.slide_down);
+        if (a != null) {
+            a.reset();
+            if (v != null) {
+                v.clearAnimation();
+                v.startAnimation(a);
+            }
+        }
+    }
+
     public void toggleContents (View v) {
-        if (mRGBText.isShown()) {
-            slideUp(this, mRGBText);
-            mRGBText.setVisibility(View.GONE);
+        String mContentName = v.getTag().toString();
+        int id = getResources().getIdentifier(mContentName, "id", this.getPackageName());
+        View mContent = findViewById(id);
+        if (mContent.isShown()) {
+            slideUp(this, mContent);
+            mContent.setVisibility(View.GONE);
         } else {
-            mRGBText.setVisibility(View.VISIBLE);
-            slideDown(this, mRGBText);
+            mContent.setVisibility(View.VISIBLE);
+            slideDown(this, mContent);
         }
     }
 }

@@ -2,7 +2,11 @@
     <string name="app_name">NaniIro</string>
     <string name="mRetakeButtonText">Retake</string>
     <string name="mReviewButtonText">View Photo</string>
-    <string name="RGB">RGB</string>
+    <string name="mRGBTitle">RGB</string>
     <string name="mRGBTextDefault">RGB</string>
+    <string name="mHSVTitle">HSV</string>
+    <string name="mHSVTextDefault">HSV</string>
+    <string name="mClosestColorTitle">Closest Color</string>
+    <string name="mClosestColorTextDefault">Closest Color</string>
     <string name="mImageView_desc">color</string>
 </resources>

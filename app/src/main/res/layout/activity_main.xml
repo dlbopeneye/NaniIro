@@ -7,7 +7,7 @@
     tools:context=".MainActivity">
 
     <ImageView
-        android:id="@+id/mImageView"
+        android:id="@+id/mColorDisplay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -23,37 +23,73 @@
     <!-- RGB -->
     <TextView
         android:id="@+id/mRGBTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:clickable="true"
         android:focusable="true"
         android:onClick="toggleContents"
-        android:text="@string/RGB"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:tag="mRGBText"
+        android:text="@string/mRGBTitle"
+        app:layout_constraintBottom_toTopOf="@+id/mHSVTitle"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/mRGBText"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:text="@string/mRGBTextDefault"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mRGBTitle" />
 
+    <!-- HSV -->
+    <TextView
+        android:id="@+id/mHSVTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="toggleContents"
+        android:tag="mHSVText"
+        android:text="@string/mHSVTitle"
+        app:layout_constraintTop_toBottomOf="@+id/mRGBTitle"
+        app:layout_constraintBottom_toTopOf="@+id/mClosestColorTitle" />
+
+    <TextView
+        android:id="@+id/mHSVText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/mHSVTextDefault"
+        app:layout_constraintTop_toBottomOf="@+id/mHSVTitle" />
+
+    <!-- Closest Color -->
+    <TextView
+        android:id="@+id/mClosestColorTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="toggleContents"
+        android:tag="mClosestColorText"
+        android:text="@string/mClosestColorTitle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mHSVTitle" />
+
+    <TextView
+        android:id="@+id/mClosestColorText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/mClosestColorTextDefault"
+        app:layout_constraintTop_toBottomOf="@+id/mClosestColorTitle"/>
+
+    <!-- Buttons -->
     <Button
         android:id="@+id/mRetakeButton"
         android:layout_width="wrap_content"
