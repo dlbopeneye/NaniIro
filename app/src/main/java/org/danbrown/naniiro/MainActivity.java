@@ -40,8 +40,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         final Button mRetakeButton = findViewById(R.id.mRetakeButton);
-        findViewById(R.id.mRGBText).setVisibility(View.GONE);
-        findViewById(R.id.mHSVText).setVisibility(View.GONE);
+        findViewById(R.id.mRGBContents).setVisibility(View.GONE);
+        findViewById(R.id.mHSVContents).setVisibility(View.GONE);
         findViewById(R.id.mClosestColorText).setVisibility(View.GONE);
         mRetakeButton.setOnClickListener(new View.OnClickListener() {
            public void onClick(View v) {

@@ -20,7 +20,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@mipmap/ic_launcher_round" />
+
     <!-- RGB -->
+
     <TextView
         android:id="@+id/mRGBTitle"
         android:layout_width="match_parent"
@@ -30,20 +32,27 @@
         android:clickable="true"
         android:focusable="true"
         android:onClick="toggleContents"
-        android:tag="mRGBText"
+        android:tag="mRGBGroup"
         android:text="@string/mRGBTitle"
         app:layout_constraintBottom_toTopOf="@+id/mHSVTitle"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/mRGBText"
+    <RelativeLayout
+        android:id="@+id/mRGBContents"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="@string/mRGBTextDefault"
-        app:layout_constraintTop_toBottomOf="@+id/mRGBTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/mRGBTitle">
+        <TextView
+            android:id="@+id/mRGBText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/mRGBTextDefault" />
+
+    </RelativeLayout>
 
     <!-- HSV -->
+
     <TextView
         android:id="@+id/mHSVTitle"
         android:layout_width="match_parent"
@@ -58,13 +67,19 @@
         app:layout_constraintTop_toBottomOf="@+id/mRGBTitle"
         app:layout_constraintBottom_toTopOf="@+id/mClosestColorTitle" />
 
-    <TextView
-        android:id="@+id/mHSVText"
+    <RelativeLayout
+        android:id="@+id/mHSVContents"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="@string/mHSVTextDefault"
-        app:layout_constraintTop_toBottomOf="@+id/mHSVTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/mHSVTitle">
+        <TextView
+            android:id="@+id/mHSVText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/mHSVTextDefault" />
+    </RelativeLayout>
 
     <!-- Closest Color -->
     <TextView
