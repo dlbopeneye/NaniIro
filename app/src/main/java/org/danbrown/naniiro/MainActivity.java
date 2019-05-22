@@ -1,7 +1,5 @@
 package org.danbrown.naniiro;
 
-import org.danbrown.naniiro.ColorSets;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -40,9 +38,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         final Button mRetakeButton = findViewById(R.id.mRetakeButton);
-        findViewById(R.id.mRGBContents).setVisibility(View.GONE);
-        findViewById(R.id.mHSVContents).setVisibility(View.GONE);
-        findViewById(R.id.mClosestColorText).setVisibility(View.GONE);
+        findViewById(R.id.mRGBContent).setVisibility(View.GONE);
+        findViewById(R.id.mHSVContent).setVisibility(View.GONE);
+        findViewById(R.id.mClosestColorContent).setVisibility(View.GONE);
         mRetakeButton.setOnClickListener(new View.OnClickListener() {
            public void onClick(View v) {
                dispatchTakePictureIntent();
@@ -152,12 +150,23 @@ public class MainActivity extends AppCompatActivity {
 
         TextView mClosestColorText = findViewById(R.id.mClosestColorText);
         mClosestColorText.setText(ColorSets.X11Colors[closestIndex].ColorName);
+        setClosestColorRGB(ColorSets.X11Colors[closestIndex].ColorRGB);
+    }
+
+    private void setClosestColorRGB (int mRGB) {
+        int r = (mRGB >> 16) & 0xff;
+        int g = (mRGB >> 8) & 0xff;
+        int b = mRGB & 0xff;
+        String mRGBString = "R " + r + "\nG " + g + "\nB " + b;
+
+        TextView mRGBText = findViewById(R.id.mClosestColorRGB);
+        mRGBText.setText(mRGBString);
     }
 
     private float findHSVDist(float[] mHSVOne, float[] mHSVTwo) {
-        return (mHSVOne[0] - mHSVTwo[0])*(mHSVOne[0] - mHSVTwo[0]) +
-                (mHSVOne[1] - mHSVTwo[1])*(mHSVOne[1] - mHSVTwo[1]) +
-                (mHSVOne[2] - mHSVTwo[2])*(mHSVOne[2] - mHSVTwo[2]);
+        return 0.475f*(mHSVOne[0] - mHSVTwo[0])*(mHSVOne[0] - mHSVTwo[0]) +
+                0.2875f*(mHSVOne[1] - mHSVTwo[1])*(mHSVOne[1] - mHSVTwo[1]) +
+                0.2375f*(mHSVOne[2] - mHSVTwo[2])*(mHSVOne[2] - mHSVTwo[2]);
     }
 
     public void reviewImage(View v) {

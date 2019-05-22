@@ -32,21 +32,19 @@
         android:clickable="true"
         android:focusable="true"
         android:onClick="toggleContents"
-        android:tag="mRGBGroup"
+        android:tag="mRGBContent"
         android:text="@string/mRGBTitle"
         app:layout_constraintBottom_toTopOf="@+id/mHSVTitle"
         app:layout_constraintTop_toTopOf="parent" />
     <RelativeLayout
-        android:id="@+id/mRGBContents"
+        android:id="@+id/mRGBContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@+id/mRGBTitle">
         <TextView
             android:id="@+id/mRGBText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:text="@string/mRGBTextDefault" />
 
     </RelativeLayout>
@@ -62,22 +60,20 @@
         android:clickable="true"
         android:focusable="true"
         android:onClick="toggleContents"
-        android:tag="mHSVText"
+        android:tag="mHSVContent"
         android:text="@string/mHSVTitle"
         app:layout_constraintTop_toBottomOf="@+id/mRGBTitle"
         app:layout_constraintBottom_toTopOf="@+id/mClosestColorTitle" />
 
     <RelativeLayout
-        android:id="@+id/mHSVContents"
+        android:id="@+id/mHSVContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@+id/mHSVTitle">
         <TextView
             android:id="@+id/mHSVText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:text="@string/mHSVTextDefault" />
     </RelativeLayout>
 
@@ -91,18 +87,29 @@
         android:clickable="true"
         android:focusable="true"
         android:onClick="toggleContents"
-        android:tag="mClosestColorText"
+        android:tag="mClosestColorContent"
         android:text="@string/mClosestColorTitle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mHSVTitle" />
 
-    <TextView
-        android:id="@+id/mClosestColorText"
+    <RelativeLayout
+        android:id="@+id/mClosestColorContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/mClosestColorTextDefault"
-        app:layout_constraintTop_toBottomOf="@+id/mClosestColorTitle"/>
+        app:layout_constraintTop_toBottomOf="@+id/mClosestColorTitle">
+        <TextView
+            android:id="@+id/mClosestColorText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/mClosestColorTextDefault" />
+
+        <TextView
+            android:id="@+id/mClosestColorRGB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/mRGBTextDefault"
+            android:layout_below="@+id/mClosestColorText" />
+    </RelativeLayout>
 
     <!-- Buttons -->
     <Button
@@ -129,5 +136,7 @@
         android:text="@string/mReviewButtonText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
 
 </android.support.constraint.ConstraintLayout>
