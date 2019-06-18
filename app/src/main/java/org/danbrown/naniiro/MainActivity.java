@@ -3,6 +3,7 @@ package org.danbrown.naniiro;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.ColorSpace;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -78,16 +79,16 @@ public class MainActivity extends AppCompatActivity {
             Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
             int mRGB = bitmap.getPixel((bitmap.getWidth() / 2), (bitmap.getHeight() / 2));
 
+            // Color Conversions
             float[] mHSV = new float[3];
             colorToHSV(mRGB, mHSV);
+            float[] mRGBArray = RGBIntToArray(mRGB);
 
+            // Setting Displays
             setColorDisplay(mRGB);
             setRGBText(mRGB);
             setHSVText(mHSV);
-            findClosestColor(mHSV);
-
-            // TextView mClosestColorText = findViewById(R.id.mClosestColorText);
-            // mClosestColorText.setText(ColorSets.X11Colors[0].ColorName);
+            findClosestColor(mRGBArray);
         }
     }
 
@@ -108,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
         return image;
     }
 
+    /* Top Banner Color Display */
     private void setColorDisplay(int mRGB) {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -118,16 +120,18 @@ public class MainActivity extends AppCompatActivity {
         mImageView.setImageBitmap(mBlock);
     }
 
+    /* RGB Drop Down */
     private void setRGBText(int mRGB) {
         int r = (mRGB >> 16) & 0xff;
         int g = (mRGB >> 8) & 0xff;
         int b = mRGB & 0xff;
-        String mRGBString = "R " + r + "\nG " + g + "\nB " + b;
 
+        String mRGBString = "R " + r + "\nG " + g + "\nB " + b;
         TextView mRGBText = findViewById(R.id.mRGBText);
         mRGBText.setText(mRGBString);
     }
 
+    /* HSV Drop Down */
     private void setHSVText(float[] mHSV) {
         String mHSVString = "H " + mHSV[0] + "\nS " + mHSV[1] + "\nV " + mHSV[2];
 
@@ -135,19 +139,22 @@ public class MainActivity extends AppCompatActivity {
         mHSVText.setText(mHSVString);
     }
 
-    private void findClosestColor(float[] mHSV) {
+    /* Closest Color Drop Down */
+    private void findClosestColor(float[] mRGBArray) {
         float distance = Float.MAX_VALUE;
         int closestIndex = 0;
+        ColorSpace.Connector c = ColorSpace.connect(
+                ColorSpace.get(ColorSpace.Named.SRGB),
+                ColorSpace.get(ColorSpace.Named.CIE_LAB));
+        float[] mCIELab = c.transform(mRGBArray);
         for (int i = 0; i < ColorSets.X11Colors.length; i++) {
-            float[] X11HSV = new float[3];
-            colorToHSV(ColorSets.X11Colors[i].ColorRGB, X11HSV);
-            float tryDistance = findHSVDist(mHSV, X11HSV);
+            float[] X11CIELab = c.transform(RGBIntToArray(ColorSets.X11Colors[i].ColorRGB));
+            float tryDistance = findCIELabDist(mCIELab, X11CIELab);
             if (tryDistance < distance) {
                 distance = tryDistance;
                 closestIndex = i;
             }
         }
-
         TextView mClosestColorText = findViewById(R.id.mClosestColorText);
         mClosestColorText.setText(ColorSets.X11Colors[closestIndex].ColorName);
         setClosestColorRGB(ColorSets.X11Colors[closestIndex].ColorRGB);
@@ -163,10 +170,23 @@ public class MainActivity extends AppCompatActivity {
         mRGBText.setText(mRGBString);
     }
 
-    private float findHSVDist(float[] mHSVOne, float[] mHSVTwo) {
-        return 0.475f*(mHSVOne[0] - mHSVTwo[0])*(mHSVOne[0] - mHSVTwo[0]) +
-                0.2875f*(mHSVOne[1] - mHSVTwo[1])*(mHSVOne[1] - mHSVTwo[1]) +
-                0.2375f*(mHSVOne[2] - mHSVTwo[2])*(mHSVOne[2] - mHSVTwo[2]);
+    private float findCIELabDist(float[] mCIELabOne, float[] mCIELabTwo) {
+        return (mCIELabOne[0] - mCIELabTwo[0])*(mCIELabOne[0] - mCIELabTwo[0]) +
+                (mCIELabOne[1] - mCIELabTwo[1])*(mCIELabOne[1] - mCIELabTwo[1]) +
+                (mCIELabOne[2] - mCIELabTwo[2])*(mCIELabOne[2] - mCIELabTwo[2]);
+    }
+    // convert RGB value from #rrggbb (00-ff) to [r,g,b] (0.0-1.0)
+    private float[] RGBIntToArray(int mRGB) {
+        int r = (mRGB >> 16) & 0xff;
+        int g = (mRGB >> 8) & 0xff;
+        int b = mRGB & 0xff;
+
+        float[] mRGBArray = new float[3];
+        mRGBArray[0] = (float)r / 255.0f;
+        mRGBArray[1] = (float)g / 255.0f;
+        mRGBArray[2] = (float)b / 255.0f;
+
+        return mRGBArray;
     }
 
     public void reviewImage(View v) {
