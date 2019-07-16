@@ -11,6 +11,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.View;
@@ -157,7 +158,9 @@ public class MainActivity extends AppCompatActivity {
         }
         TextView mClosestColorText = findViewById(R.id.mClosestColorText);
         mClosestColorText.setText(ColorSets.X11Colors[closestIndex].ColorName);
+
         setClosestColorRGB(ColorSets.X11Colors[closestIndex].ColorRGB);
+        setClosestColorDisplay(ColorSets.X11Colors[closestIndex].ColorRGB);
     }
 
     private void setClosestColorRGB (int mRGB) {
@@ -170,11 +173,23 @@ public class MainActivity extends AppCompatActivity {
         mRGBText.setText(mRGBString);
     }
 
+    private void setClosestColorDisplay (int mRGB) {
+        Log.d("CCDNOTWORKING", Integer.toString(mRGB));
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        Bitmap mBlock = Bitmap.createBitmap(250, 250, Bitmap.Config.ARGB_8888);
+        mBlock.eraseColor(mRGB);
+
+        ImageView mImageView = findViewById(R.id.mClosestColorDisplay);
+        mImageView.setImageBitmap(mBlock);
+    }
+
     private float findCIELabDist(float[] mCIELabOne, float[] mCIELabTwo) {
         return (mCIELabOne[0] - mCIELabTwo[0])*(mCIELabOne[0] - mCIELabTwo[0]) +
                 (mCIELabOne[1] - mCIELabTwo[1])*(mCIELabOne[1] - mCIELabTwo[1]) +
                 (mCIELabOne[2] - mCIELabTwo[2])*(mCIELabOne[2] - mCIELabTwo[2]);
     }
+
     // convert RGB value from #rrggbb (00-ff) to [r,g,b] (0.0-1.0)
     private float[] RGBIntToArray(int mRGB) {
         int r = (mRGB >> 16) & 0xff;

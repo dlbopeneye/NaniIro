@@ -6,20 +6,43 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <ImageView
-        android:id="@+id/mColorDisplay"
-        android:layout_width="wrap_content"
+    <!-- Header -->
+    <RelativeLayout
+        android:id="@+id/headerView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:contentDescription="@string/mImageView_desc"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/ic_launcher_round" />
+        android:layout_alignParentTop="true"
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <Button
+            android:id="@+id/mRetakeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:text="@string/mRetakeButtonText" />
+
+        <ImageView
+            android:id="@+id/mColorDisplay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/mImageView_desc"
+            app:srcCompat="@mipmap/ic_launcher_round" />
+
+        <Button
+            android:id="@+id/mReviewButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="reviewImage"
+            android:text="@string/mReviewButtonText" />
+    </RelativeLayout>
 
     <!-- RGB -->
 
@@ -27,8 +50,6 @@
         android:id="@+id/mRGBTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
         android:clickable="true"
         android:focusable="true"
         android:onClick="toggleContents"
@@ -55,8 +76,6 @@
         android:id="@+id/mHSVTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
         android:clickable="true"
         android:focusable="true"
         android:onClick="toggleContents"
@@ -82,8 +101,6 @@
         android:id="@+id/mClosestColorTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
         android:clickable="true"
         android:focusable="true"
         android:onClick="toggleContents"
@@ -109,34 +126,14 @@
             android:layout_height="wrap_content"
             android:text="@string/mRGBTextDefault"
             android:layout_below="@+id/mClosestColorText" />
+
+        <ImageView
+            android:id="@+id/mClosestColorDisplay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/mImageView_desc"
+            app:srcCompat="@mipmap/ic_launcher_round"
+            android:layout_below="@+id/mClosestColorRGB"/>
     </RelativeLayout>
-
-    <!-- Buttons -->
-    <Button
-        android:id="@+id/mRetakeButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/mRetakeButtonText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/mReviewButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:onClick="reviewImage"
-        android:text="@string/mReviewButtonText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
 
 </android.support.constraint.ConstraintLayout>
