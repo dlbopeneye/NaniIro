@@ -2,18 +2,18 @@ package org.danbrown.naniiro;
 
 import android.graphics.ColorSpace;
 
-public class ColorSets {
+class ColorSets {
     static class ColorSet {
-        public String ColorName;
-        public int ColorRGB;
+        String ColorName;
+        int ColorRGB;
 
-        public ColorSet(String name, int RGB) {
+        ColorSet(String name, int RGB) {
             this.ColorName = name;
             this.ColorRGB = RGB;
         }
     }
 
-    public static ColorSet[] X11Colors = {
+    static ColorSet[] X11Colors = {
             new ColorSet("Alice Blue", 0xfff0f8ff),
             new ColorSet("Antique White", 0xfffaebd7),
             new ColorSet("Aquamarine", 0xff7fffd4),
