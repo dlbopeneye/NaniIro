@@ -89,6 +89,8 @@ public class MainActivity extends AppCompatActivity {
             setColorDisplay(mRGB);
             setRGBText(mRGB);
             setHSVText(mHSV);
+
+            // closest color
             findClosestColor(mRGBArray);
         }
     }
@@ -140,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         mHSVText.setText(mHSVString);
     }
 
-    /* Closest Color Drop Down */
+    // Closest Color
     private void findClosestColor(float[] mRGBArray) {
         float distance = Float.MAX_VALUE;
         int closestIndex = 0;
@@ -162,7 +164,6 @@ public class MainActivity extends AppCompatActivity {
         setClosestColorRGB(ColorSets.X11Colors[closestIndex].ColorRGB);
         setClosestColorDisplay(ColorSets.X11Colors[closestIndex].ColorRGB);
     }
-
     private void setClosestColorRGB (int mRGB) {
         int r = (mRGB >> 16) & 0xff;
         int g = (mRGB >> 8) & 0xff;
@@ -174,10 +175,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setClosestColorDisplay (int mRGB) {
-        Log.d("CCDNOTWORKING", Integer.toString(mRGB));
+        Log.d("CCDNOTWORKING", Integer.toHexString(mRGB));
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        Bitmap mBlock = Bitmap.createBitmap(250, 250, Bitmap.Config.ARGB_8888);
+        Bitmap mBlock = Bitmap.createBitmap(displayMetrics.widthPixels, 250, Bitmap.Config.ARGB_8888);
         mBlock.eraseColor(mRGB);
 
         ImageView mImageView = findViewById(R.id.mClosestColorDisplay);

@@ -55,8 +55,8 @@
         android:onClick="toggleContents"
         android:tag="mRGBContent"
         android:text="@string/mRGBTitle"
-        app:layout_constraintBottom_toTopOf="@+id/mHSVTitle"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textAppearance="@style/TitleTheme"
+        app:layout_constraintTop_toBottomOf="@id/headerView" />
     <RelativeLayout
         android:id="@+id/mRGBContent"
         android:layout_width="match_parent"
@@ -81,8 +81,8 @@
         android:onClick="toggleContents"
         android:tag="mHSVContent"
         android:text="@string/mHSVTitle"
-        app:layout_constraintTop_toBottomOf="@+id/mRGBTitle"
-        app:layout_constraintBottom_toTopOf="@+id/mClosestColorTitle" />
+        android:textAppearance="@style/TitleTheme"
+        app:layout_constraintTop_toBottomOf="@+id/mRGBContent" />
 
     <RelativeLayout
         android:id="@+id/mHSVContent"
@@ -106,8 +106,8 @@
         android:onClick="toggleContents"
         android:tag="mClosestColorContent"
         android:text="@string/mClosestColorTitle"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mHSVTitle" />
+        android:textAppearance="@style/TitleTheme"
+        app:layout_constraintTop_toBottomOf="@+id/mHSVContent" />
 
     <RelativeLayout
         android:id="@+id/mClosestColorContent"
